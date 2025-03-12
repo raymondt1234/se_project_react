@@ -2,7 +2,7 @@ import "./Main.css";
 import WeatherCard from "../WeatherCard/WeatherCard";
 import ItemCard from "../ItemCard/ItemCard";
 import { defaultClothingItems } from "../../utils/constants";
-import PropTypes from "prop-types";
+
 
 function Main({ weatherData }) {
   return (
@@ -25,11 +25,5 @@ function Main({ weatherData }) {
     </main>
   );
 }
-
-Main.propTypes = {
-  weatherData: PropTypes.shape({
-    type: PropTypes.string.isRequired,
-  }).isRequired,
-};
 
 export default Main;

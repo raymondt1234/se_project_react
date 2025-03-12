@@ -1,5 +1,4 @@
 import "./ItemCard.css";
-import PropTypes from 'prop-types';
 
 function ItemCard({ item }) {
   return (
@@ -9,12 +8,5 @@ function ItemCard({ item }) {
     </li>
   );
 }
-
-ItemCard.propTypes = {
-  item: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    link: PropTypes.string.isRequired
-  }).isRequired
-};
 
 export default ItemCard;
