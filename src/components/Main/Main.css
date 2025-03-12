@@ -4,7 +4,7 @@
   line-height: 20px;
 }
 
-.cards___list {
+.cards__list {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
