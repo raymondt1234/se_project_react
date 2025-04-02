@@ -14,15 +14,15 @@ export const getWeather = ({latitude, longitude}, APIkey) => {
 }
 
 export const processWeatherData = (data) => {
-  const tempF = data.main.temp;
-  const tempC = (tempF - 32) * 5/9;
   const currentTimeSeconds = Date.now() / 1000; // convert milliseconds to seconds
+  let tempF = Math.round(data.main.temp);
+  let tempC = Math.round((data.main.temp - 32) * 5/9);
 
   const result = {};
 
   result.type = getWeatherType(data.main.temp);
   result.city = data.name;
-  result.temp = {F:tempF, C: tempC };
+  result.temp = {F: tempF, C: tempC };
   result.condition = data.weather[0].main.toLowerCase();
   result.isDay = isDay(data.sys, currentTimeSeconds);
 
