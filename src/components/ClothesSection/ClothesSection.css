@@ -1,0 +1,10 @@
+.clothes-section__user {
+  display: flex;
+}
+
+.clothes-section__list {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  gap: 20px;
+}

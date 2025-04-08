@@ -14,6 +14,11 @@
   visibility: hidden;
 }
 
+.modal__content_type_image {
+  overflow: hidden;
+  padding: 0;
+}
+
 .modal_opened {
   visibility: visible;
 }
@@ -25,7 +30,7 @@
   border-radius: 12px;
   background-color: #fff;
   position: relative;
-  padding: 28px 28px 36px;
+  padding-bottom: 28px 28px 36px;
 }
 
 .modal__title {
