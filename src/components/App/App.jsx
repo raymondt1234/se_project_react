@@ -4,17 +4,15 @@ import { Routes, Route } from "react-router-dom";
 import Header from "../Header/Header";
 import Main from "../Main/Main";
 import Footer from "../Footer/Footer";
-import ItemModal from "../ItemModal/ItemModal";
 import Profile from "../Profile/Profile";
-import { getWeather, processWeatherData } from "../../utils/weatherApi";
-import {
-  coordinates,
-  APIkey,
-  defaultClothingItems,
-} from "../../utils/constants";
-import CurrentTemperatureUnitContext from "../../contexts/CurrentTemperatureUnit";
+import ItemModal from "../ItemModal/ItemModal";
 import AddItemModal from "../AddItemModal/AddItemModal";
-import { getItems } from "../../utils/api";
+import DeleteConfirmationModal from "../DeleteConfirmationModal/DeleteConfirmationModal";
+import { getWeather, processWeatherData } from "../../utils/weatherApi";
+import { coordinates, APIkey } from "../../utils/constants";
+import CurrentTemperatureUnitContext from "../../contexts/CurrentTemperatureUnit";
+import { addItem, getItems, deleteItem } from "../../utils/api";
+
 
 function App() {
   const [weatherData, setWeatherData] = useState({
@@ -43,16 +41,39 @@ function App() {
     setCurrentTemperatureUnit(currentTemperatureUnit === "F" ? "C" : "F");
   };
 
-  const closeActiveModal = () => {
-    setActiveModal("");
-  };
-
   const handleAddItemModalSubmit = ({ name, imageUrl, weather }) => {
     setClothingItems((prevItems) => [
       ...prevItems,
       { name, link: imageUrl, weather },
     ]);
+    addItem(name, imageUrl, weather);
     closeActiveModal();
+  };
+
+  const handleDeleteItem = (id) => {
+    deleteItem(id)
+      .then(() => {
+        loadItems();
+        closeActiveModal();
+      })
+      .catch(console.error);
+  };
+
+  const openConfirmationModal = () => {
+    setActiveModal("confirm-delete");
+  };
+
+  const closeActiveModal = () => {
+    setActiveModal("");
+  };
+
+
+  const loadItems = () => {
+    getItems()
+      .then((data) => {
+        setClothingItems(data);
+      })
+      .catch(console.error);
   };
 
   useEffect(() => {
@@ -65,12 +86,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    getItems()
-      .then((data) => {
-        setClothingItems(data);
-        console.log(data);
-      })
-      .catch(console.error);
+    loadItems();
   }, []);
 
   return (
@@ -114,6 +130,13 @@ function App() {
           activeModal={activeModal}
           onClose={closeActiveModal}
           card={selectedCard}
+          openConfirmationModal={openConfirmationModal}
+        />
+        <DeleteConfirmationModal
+          activeModal={activeModal}
+          onClose={closeActiveModal}
+          card={selectedCard}
+          onDeleteItem={handleDeleteItem}
         />
       </div>
     </CurrentTemperatureUnitContext.Provider>

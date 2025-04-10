@@ -4,7 +4,7 @@ import avatarImage from "../../assets/avatar.svg";
 function Sidebar () {
   return (
     <div className="sidebar">
-      <img src={avatarImage} alt="Terrence Tegegne" />
+      <img className="sidebar__image" src={avatarImage} alt="Terrence Tegegne" />
       <p className="sidebar__username">Terrence Tegegne</p>
     </div>
   )

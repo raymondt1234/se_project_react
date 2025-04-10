@@ -29,6 +29,6 @@ function ModalWithForm({
       </div>
     </div>
   );
-}
+};
 
 export default ModalWithForm;

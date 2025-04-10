@@ -1,0 +1,43 @@
+.modal__content_type_confirm {
+  width: 670px;
+  max-width: 670px; 
+  height: 280px;
+  padding: 0;
+}
+
+.modal__confirmation-modal-messages {
+  margin-top: 60px;
+  padding: 0;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.modal__confirmation-msg {
+  margin: 0;
+}
+
+.modal__confirmation-modal-buttons {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal__confirmation-btn {
+  color: #FF4D00;
+  margin: 40px 0 24px;
+  padding: 0;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+  border: none;
+  background: none;
+}
+
+.modal__cancel-btn {
+  margin: 0 0 20px;
+  color: black;
+}
