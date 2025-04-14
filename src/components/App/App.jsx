@@ -13,7 +13,6 @@ import { coordinates, APIkey } from "../../utils/constants";
 import CurrentTemperatureUnitContext from "../../contexts/CurrentTemperatureUnit";
 import { addItem, getItems, deleteItem } from "../../utils/api";
 
-
 function App() {
   const [weatherData, setWeatherData] = useState({
     type: "",
@@ -42,12 +41,12 @@ function App() {
   };
 
   const handleAddItemModalSubmit = ({ name, imageUrl, weather }) => {
-    setClothingItems((prevItems) => [
-      ...prevItems,
-      { name, link: imageUrl, weather },
-    ]);
-    addItem(name, imageUrl, weather);
-    closeActiveModal();
+    addItem(name, imageUrl, weather)
+      .then((newItem) => {
+        setClothingItems((prevItems) => [newItem, ...prevItems]);
+        closeActiveModal();
+      })
+      .catch(console.error);
   };
 
   const handleDeleteItem = (id) => {
@@ -66,7 +65,6 @@ function App() {
   const closeActiveModal = () => {
     setActiveModal("");
   };
-
 
   const loadItems = () => {
     getItems()
@@ -112,6 +110,7 @@ function App() {
               path="/profile"
               element={
                 <Profile
+                  handleAddClick={handleAddClick}
                   onCardClick={handleCardClick}
                   clothingItems={clothingItems}
                 />

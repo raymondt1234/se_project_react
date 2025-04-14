@@ -23,5 +23,5 @@ function deleteItem(id) {
   });
 }
 
-export { getItems, addItem, deleteItem };
 
+export { getItems, addItem, deleteItem };
