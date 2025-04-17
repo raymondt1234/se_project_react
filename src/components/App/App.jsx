@@ -26,6 +26,7 @@ function App() {
   const [activeModal, setActiveModal] = useState("");
   const [selectedCard, setSelectedCard] = useState({});
   const [currentTemperatureUnit, setCurrentTemperatureUnit] = useState("F");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleAddClick = () => {
     setActiveModal("add-garment");
@@ -41,18 +42,21 @@ function App() {
   };
 
   const handleAddItemModalSubmit = ({ name, imageUrl, weather }) => {
+    setIsLoading(true);
     addItem(name, imageUrl, weather)
       .then((newItem) => {
         setClothingItems((prevItems) => [newItem, ...prevItems]);
         closeActiveModal();
       })
-      .catch(console.error);
+      .catch(console.error).finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const handleDeleteItem = (id) => {
     deleteItem(id)
       .then(() => {
-        loadItems();
+        removeItem(id);
         closeActiveModal();
       })
       .catch(console.error);
@@ -66,6 +70,10 @@ function App() {
     setActiveModal("");
   };
 
+  const removeItem = (id) => {
+    setClothingItems(clothingItems.filter(item => item._id !== id));
+  }
+
   const loadItems = () => {
     getItems()
       .then((data) => {
@@ -73,6 +81,23 @@ function App() {
       })
       .catch(console.error);
   };
+
+  useEffect(() => {
+
+    if (!activeModal) return; 
+
+    const handleEscClose = (event) => {
+      if (event.key === "Escape") {
+        closeActiveModal ();
+      }
+    };
+
+    document.addEventListener("keydown", handleEscClose);
+
+    return () => {
+      document.removeEventListener("keydown", handleEscClose);
+    };
+  }, [activeModal])
 
   useEffect(() => {
     getWeather(coordinates, APIkey)
@@ -123,6 +148,7 @@ function App() {
         <AddItemModal
           onClose={closeActiveModal}
           isOpen={activeModal === "add-garment"}
+          isLoading={isLoading}
           onAddItemModalSubmit={handleAddItemModalSubmit}
         />
         <ItemModal

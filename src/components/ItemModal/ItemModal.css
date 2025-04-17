@@ -1,4 +1,7 @@
 .modal .modal__content_type_image {
+  width: 498px;
+  height: 498px;
+  object-fit: contain;
   overflow: hidden;
   padding: 0;
 }
