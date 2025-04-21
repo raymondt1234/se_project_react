@@ -2,6 +2,7 @@ import "./ItemModal.css";
 import closeWhite from "../../assets/close-x-white.svg";
 
 function ItemModal({ activeModal, onClose, card, openConfirmationModal }) {
+  console.log(card);
   return (
     <div className={`modal ${activeModal === "preview" && "modal_opened"}`}>
       <div className="modal__content modal__content_type_image">
