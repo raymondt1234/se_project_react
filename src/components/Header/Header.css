@@ -24,6 +24,16 @@
 .header__button-container {
   display: flex;
   margin-left: auto;
+  gap: 16px;
+}
+
+.header__sign-up-btn {
+  border: none;
+  background: none;
+}
+.header__login-btn {
+  border: none;
+  background: none;
 }
 
 .header__add-clothes-btn {

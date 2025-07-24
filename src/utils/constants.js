@@ -76,3 +76,5 @@ export const coordinates = {
 };
 
 export const APIkey = "d981ad53218f8f462d803f9f7863709e";
+
+export const baseUrl = "http://localhost:3001";

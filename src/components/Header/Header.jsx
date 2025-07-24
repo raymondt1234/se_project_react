@@ -1,14 +1,23 @@
 import "./Header.css";
-import headerLogo from "../../assets/logo.svg";
-import avatarImage from "../../assets/avatar.svg";
-import ToggleSwitch from "../ToggleSwitch/ToggleSwitch";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import headerLogo from "../../assets/logo.svg";
+import ToggleSwitch from "../ToggleSwitch/ToggleSwitch";
+import CurrentUserContext from "../../contexts/CurrentUserContext";
 
-function Header({ handleAddClick, weatherData }) {
+function Header({
+  weatherData,
+  isLoggedIn,
+  handleSignUpClick,
+  handleLoginClick,
+  handleAddClick,
+}) {
   const currentDate = new Date().toLocaleString("default", {
     month: "long",
     day: "numeric",
   });
+
+  const { name, avatar } = useContext(CurrentUserContext);
 
   return (
     <header className="header">
@@ -20,24 +29,41 @@ function Header({ handleAddClick, weatherData }) {
       </p>
       <div className="header__button-container">
         <ToggleSwitch />
-        <button
-          onClick={handleAddClick}
-          type="button"
-          className="header__add-clothes-btn"
-        >
-          + Add clothes
-        </button>
+        {isLoggedIn ? (
+          <button
+            onClick={handleAddClick}
+            type="button"
+            className="header__add-clothes-btn"
+          >
+            + Add clothes
+          </button>
+        ) : (
+          <>
+            <button
+              onClick={handleSignUpClick}
+              type="button"
+              className="header__sign-up-btn"
+            >
+              Sign Up
+            </button>
+            <button
+              onClick={handleLoginClick}
+              type="button"
+              className="header__login-btn"
+            >
+              Log In
+            </button>
+          </>
+        )}
       </div>
-      <Link to="/profile" className="header__link">
-        <div className="header__user-container">
-          <p className="header__username">Terrence Tegegne</p>
-          <img
-            className="header__avatar"
-            src={avatarImage}
-            alt="Terrence Tegegne"
-          />
-        </div>
-      </Link>
+      {isLoggedIn && (
+        <Link to="/profile" className="header__link">
+          <div className="header__user-container">
+            <p className="header__username">{name}</p>
+            <img className="header__avatar" src={avatar} alt={name} />
+          </div>
+        </Link>
+      )}
     </header>
   );
 }

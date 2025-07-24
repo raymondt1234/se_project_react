@@ -2,6 +2,11 @@
   width: 25%;
   min-width: 280px;
   display: flex;
+  flex-direction: column;
+}
+
+.sidebar__user {
+  display: flex;
   gap: 16px;
 }
 
@@ -15,4 +20,9 @@
   font-weight: 700;
   font-size: 20px;
   line-height: 20px;
+}
+
+.sidebar__actions {
+  display: flex;
+  flex-direction: column;
 }
