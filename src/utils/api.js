@@ -15,6 +15,17 @@ function addItem(name, imageUrl, weather) {
   }).then(checkResponse);
 }
 
+function editProfile(name, avatar) {
+  return fetch(`${baseUrl}/users/me`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${localStorage.getItem("jwt")}`,
+    },
+    body: JSON.stringify({ name, avatar }),
+  }).then(checkResponse);
+}
+
 function deleteItem(id) {
   return fetch(`${baseUrl}/items/${id}`, {
     method: "DELETE",
@@ -32,4 +43,4 @@ function checkResponse(res) {
   return Promise.reject(`Error ${res.status}`);
 }
 
-export { getItems, addItem, deleteItem, checkResponse };
+export { getItems, addItem, editProfile, deleteItem, checkResponse };

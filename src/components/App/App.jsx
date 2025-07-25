@@ -9,11 +9,12 @@ import RegisterModal from "../RegisterModal/RegisterModal";
 import LoginModal from "../LoginModal/LoginModal";
 import ItemModal from "../ItemModal/ItemModal";
 import AddItemModal from "../AddItemModal/AddItemModal";
+import EditProfileModal from "../EditProfileModal/EditProfileModal";
 import DeleteConfirmationModal from "../DeleteConfirmationModal/DeleteConfirmationModal";
 import { getWeather, processWeatherData } from "../../utils/weatherApi";
 import { coordinates, APIkey } from "../../utils/constants";
 import { signup, signin, validateToken } from "../../utils/auth";
-import { getItems, addItem, deleteItem } from "../../utils/api";
+import { getItems, addItem, editProfile, deleteItem } from "../../utils/api";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
 import CurrentTemperatureUnitContext from "../../contexts/CurrentTemperatureUnit";
 
@@ -47,6 +48,10 @@ function App() {
 
   const handleLoginClick = () => {
     setActiveModal("login");
+  };
+
+  const handleEditProfileClick = () => {
+    setActiveModal("edit-profile");
   };
 
   const handleAddClick = () => {
@@ -98,6 +103,19 @@ function App() {
       });
   };
 
+  const handleEditProfileModalSubmit = ({ name, avatar }) => {
+    setIsLoading(true);
+    editProfile(name, avatar)
+      .then(() => {
+        setCurrentUser((updatedUser) => ({ ...updatedUser, name, avatar }));
+        closeActiveModal();
+      })
+      .catch(console.error)
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
   const handleLoginModalSubmit = ({ email, password }) => {
     login(email, password);
   };
@@ -113,6 +131,28 @@ function App() {
       .finally(() => {
         setIsLoading(false);
       });
+  };
+
+  const handleCardLike = ({ id, isLiked }) => {
+    const token = localStorage.getItem("jwt");
+
+    !isLiked
+      ? api
+          .addCardLike(id, token)
+          .then((updatedCard) => {
+            setClothingItems((cards) =>
+              cards.map((item) => (item._id === id ? updatedCard : item))
+            );
+          })
+          .catch((err) => console.log(err))
+      : api
+          .removeCardLike(id, token)
+          .then((updatedCard) => {
+            setClothingItems((cards) =>
+              cards.map((item) => (item._id === id ? updatedCard : item))
+            );
+          })
+          .catch((err) => console.log(err));
   };
 
   const handleDeleteItem = (id) => {
@@ -217,6 +257,7 @@ function App() {
                     handleLogout={logout}
                     handleAddClick={handleAddClick}
                     onCardClick={handleCardClick}
+                    onEditProfileClick={handleEditProfileClick}
                     clothingItems={clothingItems}
                   />
                 }
@@ -236,6 +277,12 @@ function App() {
             isOpen={activeModal === "login"}
             isLoading={isLoading}
             onLoginModalSubmit={handleLoginModalSubmit}
+          />
+          <EditProfileModal
+            onClose={closeActiveModal}
+            isOpen={activeModal === "edit-profile"}
+            isLoading={isLoading}
+            onEditProfileModalSubmit={handleEditProfileModalSubmit}
           />
           <AddItemModal
             onClose={closeActiveModal}
