@@ -14,11 +14,11 @@ function Sidebar({ onEditProfileClick, handleLogout }) {
       <div className="sidebar__actions">
         <button
           onClick={onEditProfileClick}
-          className="sidebar__change-profile-data"
+          className="sidebar__button sidebar__change-profile-data"
         >
           Change profile data
         </button>
-        <button onClick={handleLogout} className="sidebar__logout">
+        <button onClick={handleLogout} className="sidebar__button sidebar__logout">
           Log out
         </button>
       </div>

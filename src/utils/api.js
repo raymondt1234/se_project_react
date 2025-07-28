@@ -15,6 +15,26 @@ function addItem(name, imageUrl, weather) {
   }).then(checkResponse);
 }
 
+function likeItem(id) {
+    return fetch(`${baseUrl}/items/${id}/likes`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${localStorage.getItem("jwt")}`,
+    }
+  }).then(checkResponse);
+}
+
+function dislikeItem(id) {
+    return fetch(`${baseUrl}/items/${id}/likes`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${localStorage.getItem("jwt")}`,
+    }
+  }).then(checkResponse);
+}
+
 function editProfile(name, avatar) {
   return fetch(`${baseUrl}/users/me`, {
     method: "PATCH",
@@ -43,4 +63,4 @@ function checkResponse(res) {
   return Promise.reject(`Error ${res.status}`);
 }
 
-export { getItems, addItem, editProfile, deleteItem, checkResponse };
+export { getItems, addItem, likeItem, dislikeItem, editProfile, deleteItem, checkResponse };

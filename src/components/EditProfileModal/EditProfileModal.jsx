@@ -20,7 +20,6 @@ function EditProfileModal({
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Sending data:", values);
     onEditProfileModalSubmit(values);
   };
 

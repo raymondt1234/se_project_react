@@ -14,7 +14,14 @@ import DeleteConfirmationModal from "../DeleteConfirmationModal/DeleteConfirmati
 import { getWeather, processWeatherData } from "../../utils/weatherApi";
 import { coordinates, APIkey } from "../../utils/constants";
 import { signup, signin, validateToken } from "../../utils/auth";
-import { getItems, addItem, editProfile, deleteItem } from "../../utils/api";
+import {
+  getItems,
+  addItem,
+  likeItem,
+  dislikeItem,
+  editProfile,
+  deleteItem,
+} from "../../utils/api";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
 import CurrentTemperatureUnitContext from "../../contexts/CurrentTemperatureUnit";
 
@@ -133,23 +140,19 @@ function App() {
       });
   };
 
-  const handleCardLike = ({ id, isLiked }) => {
-    const token = localStorage.getItem("jwt");
-
+  const handleCardLike = ({ _id }, isLiked) => {
     !isLiked
-      ? api
-          .addCardLike(id, token)
+      ? likeItem(_id)
           .then((updatedCard) => {
             setClothingItems((cards) =>
-              cards.map((item) => (item._id === id ? updatedCard : item))
+              cards.map((item) => (item._id === _id ? updatedCard : item))
             );
           })
           .catch((err) => console.log(err))
-      : api
-          .removeCardLike(id, token)
+      : dislikeItem(_id)
           .then((updatedCard) => {
             setClothingItems((cards) =>
-              cards.map((item) => (item._id === id ? updatedCard : item))
+              cards.map((item) => (item._id === _id ? updatedCard : item))
             );
           })
           .catch((err) => console.log(err));
@@ -244,8 +247,10 @@ function App() {
                 path="/"
                 element={
                   <Main
+                    isLoggedIn={isLoggedIn}
                     weatherData={weatherData}
                     onCardClick={handleCardClick}
+                    onCardLike={handleCardLike}
                     clothingItems={clothingItems}
                   />
                 }
@@ -254,9 +259,11 @@ function App() {
                 path="/profile"
                 element={
                   <Profile
+                    isLoggedIn={isLoggedIn}
                     handleLogout={logout}
                     handleAddClick={handleAddClick}
                     onCardClick={handleCardClick}
+                    onCardLike={handleCardLike}
                     onEditProfileClick={handleEditProfileClick}
                     clothingItems={clothingItems}
                   />
