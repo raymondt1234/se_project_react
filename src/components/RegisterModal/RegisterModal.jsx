@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useForm } from "../../hooks/useForm";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 
-function RegisterModal({ onClose, isOpen, isLoading, onRegisterModalSubmit }) {
+function RegisterModal({ onClose, isOpen, isLoading, onRegisterModalSubmit, onLoginClick}) {
   const { values, handleChange, setValues } = useForm({email: "", password: "", name: "", avatar: ""});
 
   useEffect(() => {
@@ -12,9 +12,10 @@ function RegisterModal({ onClose, isOpen, isLoading, onRegisterModalSubmit }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Sending data:", values);
     onRegisterModalSubmit(values);
   };
+
+  const toggleButton = {buttonText: "or Log in", onClick: onLoginClick}
 
   return (
     <ModalWithForm
@@ -24,27 +25,28 @@ function RegisterModal({ onClose, isOpen, isLoading, onRegisterModalSubmit }) {
       isOpen={isOpen}
       isLoading={isLoading}
       onSubmit={handleSubmit}
+      toggleButton={toggleButton}
     >
-      <label htmlFor="email" className="modal__label">
+      <label htmlFor="register-email" className="modal__label">
         Email*{" "}
         <input
           type="email"
           name="email"
           className="modal__input"
-          id="email"
+          id="register-email"
           placeholder="Email"
           required
           onChange={handleChange}
           value={values.email}
         />
       </label>
-      <label htmlFor="password" className="modal__label">
+      <label htmlFor="register-password" className="modal__label">
         Password*{" "}
         <input
           type="password"
           name="password"
           className="modal__input"
-          id="password"
+          id="register-password"
           placeholder="Password"
           minLength={8}
           maxLength={30}

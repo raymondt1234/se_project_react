@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useForm } from "../../hooks/useForm";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 
-function LoginModal({ onClose, isOpen, isLoading, onLoginModalSubmit }) {
+function LoginModal({ onClose, isOpen, isLoading, onLoginModalSubmit, onSignUpClick }) {
   const { values, handleChange, setValues } = useForm({email: "", password: ""});
 
   useEffect(() => {
@@ -15,6 +15,8 @@ function LoginModal({ onClose, isOpen, isLoading, onLoginModalSubmit }) {
     onLoginModalSubmit(values);
   };
 
+  const toggleButton = {buttonText: "or Sign up", onClick: onSignUpClick}
+
   return (
     <ModalWithForm
       title="Log in"
@@ -23,27 +25,28 @@ function LoginModal({ onClose, isOpen, isLoading, onLoginModalSubmit }) {
       isOpen={isOpen}
       isLoading={isLoading}
       onSubmit={handleSubmit}
+      toggleButton={toggleButton}
     >
-      <label htmlFor="email" className="modal__label">
+      <label htmlFor="login-email" className="modal__label">
         Email{" "}
         <input
           type="email"
           name="email"
           className="modal__input"
-          id="email"
+          id="login-email"
           placeholder="Email"
           required
           onChange={handleChange}
           value={values.email}
         />
       </label>
-      <label htmlFor="password" className="modal__label">
+      <label htmlFor="login-password" className="modal__label">
         Password{" "}
         <input
           type="password"
           name="password"
           className="modal__input"
-          id="password"
+          id="login-password"
           placeholder="Password"
           required
           onChange={handleChange}

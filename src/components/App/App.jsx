@@ -277,12 +277,14 @@ function App() {
             onClose={closeActiveModal}
             isOpen={activeModal === "sign-up"}
             isLoading={isLoading}
+            onLoginClick={handleLoginClick}
             onRegisterModalSubmit={handleRegisterModalSubmit}
           />
           <LoginModal
             onClose={closeActiveModal}
             isOpen={activeModal === "login"}
             isLoading={isLoading}
+            onSignUpClick={handleSignUpClick}
             onLoginModalSubmit={handleLoginModalSubmit}
           />
           <EditProfileModal
