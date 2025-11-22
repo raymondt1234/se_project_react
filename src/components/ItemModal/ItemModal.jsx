@@ -6,6 +6,7 @@ import CurrentUserContext from "../../contexts/CurrentUserContext";
 function ItemModal({ activeModal, onClose, card, openConfirmationModal }) {
   const { _id } = useContext(CurrentUserContext);
   const isOwn = card.owner === _id;
+
   return (
     <div className={`modal ${activeModal === "preview" && "modal_opened"}`}>
       <div className="modal__content modal__content_type_image">

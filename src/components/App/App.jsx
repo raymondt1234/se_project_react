@@ -46,6 +46,7 @@ function App() {
   const [selectedCard, setSelectedCard] = useState({});
   const [currentTemperatureUnit, setCurrentTemperatureUnit] = useState("F");
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -74,6 +75,15 @@ function App() {
     setCurrentTemperatureUnit(currentTemperatureUnit === "F" ? "C" : "F");
   };
 
+  const handleClearErrorMessage = () => {
+    setErrorMessage("");
+  };
+
+  const thrownErrorMessage = (error) => {
+    setErrorMessage(error);
+    console.error(error);
+  };
+
   const login = (email, password) => {
     signin(email, password)
       .then((res) => {
@@ -83,7 +93,7 @@ function App() {
         setCurrentUser(res.user);
         navigate("/profile");
       })
-      .catch(console.error);
+      .catch(thrownErrorMessage);
   };
 
   const logout = () => {
@@ -104,7 +114,7 @@ function App() {
       .then(() => {
         login(email, password);
       })
-      .catch(console.error)
+      .catch(thrownErrorMessage)
       .finally(() => {
         setIsLoading(false);
       });
@@ -112,15 +122,35 @@ function App() {
 
   const handleEditProfileModalSubmit = ({ name, avatar }) => {
     setIsLoading(true);
-    editProfile(name, avatar)
+    let updateFields = {};
+    if (currentUser.name !== name) {
+      updateFields.name = name;
+    }
+    if (currentUser.avatar !== avatar) {
+      updateFields.avatar = avatar;
+    }
+    if (avatar === "") {
+      updateFields.avatar = null;
+    }
+
+    editProfile(updateFields)
       .then(() => {
-        setCurrentUser((updatedUser) => ({ ...updatedUser, name, avatar }));
+        setCurrentUser((updatedUser) => ({ ...updatedUser, ...updateFields }));
         closeActiveModal();
       })
-      .catch(console.error)
+      .catch(thrownErrorMessage)
       .finally(() => {
         setIsLoading(false);
       });
+    // editProfile({name, avatar})
+    //   .then(() => {
+    //     setCurrentUser((updatedUser) => ({ ...updatedUser, name, avatar }));
+    //     closeActiveModal();
+    //   })
+    //   .catch(thrownErrorMessage)
+    //   .finally(() => {
+    //     setIsLoading(false);
+    //   });
   };
 
   const handleLoginModalSubmit = ({ email, password }) => {
@@ -134,7 +164,7 @@ function App() {
         setClothingItems((prevItems) => [newItem, ...prevItems]);
         closeActiveModal();
       })
-      .catch(console.error)
+      .catch(thrownErrorMessage)
       .finally(() => {
         setIsLoading(false);
       });
@@ -148,14 +178,14 @@ function App() {
               cards.map((item) => (item._id === _id ? updatedCard : item))
             );
           })
-          .catch((err) => console.log(err))
+          .catch(console.error)
       : dislikeItem(_id)
           .then((updatedCard) => {
             setClothingItems((cards) =>
               cards.map((item) => (item._id === _id ? updatedCard : item))
             );
           })
-          .catch((err) => console.log(err));
+          .catch(console.error);
   };
 
   const handleDeleteItem = (id) => {
@@ -173,6 +203,7 @@ function App() {
 
   const closeActiveModal = () => {
     setActiveModal("");
+    setErrorMessage("");
   };
 
   const removeItem = (id) => {
@@ -279,6 +310,8 @@ function App() {
             isLoading={isLoading}
             onLoginClick={handleLoginClick}
             onRegisterModalSubmit={handleRegisterModalSubmit}
+            errorMessage={errorMessage}
+            onClearErrorMessage={handleClearErrorMessage}
           />
           <LoginModal
             onClose={closeActiveModal}
@@ -286,18 +319,24 @@ function App() {
             isLoading={isLoading}
             onSignUpClick={handleSignUpClick}
             onLoginModalSubmit={handleLoginModalSubmit}
+            errorMessage={errorMessage}
+            onClearErrorMessage={handleClearErrorMessage}
           />
           <EditProfileModal
             onClose={closeActiveModal}
             isOpen={activeModal === "edit-profile"}
             isLoading={isLoading}
             onEditProfileModalSubmit={handleEditProfileModalSubmit}
+            errorMessage={errorMessage}
+            onClearErrorMessage={handleClearErrorMessage}
           />
           <AddItemModal
             onClose={closeActiveModal}
             isOpen={activeModal === "add-garment"}
             isLoading={isLoading}
             onAddItemModalSubmit={handleAddItemModalSubmit}
+            errorMessage={errorMessage}
+            onClearErrorMessage={handleClearErrorMessage}
           />
           <ItemModal
             activeModal={activeModal}

@@ -10,17 +10,24 @@ function EditProfileModal({
   isOpen,
   isLoading,
   onEditProfileModalSubmit,
+  errorMessage,
+  onClearErrorMessage,
 }) {
   const { name, avatar } = useContext(CurrentUserContext);
   const { values, handleChange, setValues } = useForm({ name: "", avatar: "" });
 
   useEffect(() => {
-    setValues({ name, avatar});
+    setValues({ name, avatar: avatar || ""});
   }, [name, avatar, isOpen, setValues]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     onEditProfileModalSubmit(values);
+  };
+
+  const handleInput = (event) => {
+    handleChange(event);
+    onClearErrorMessage();
   };
 
   return (
@@ -31,6 +38,7 @@ function EditProfileModal({
       isOpen={isOpen}
       isLoading={isLoading}
       onSubmit={handleSubmit}
+      errorMessage={errorMessage}
     >
       <label htmlFor="name" className="modal__label">
         Name*{" "}
@@ -42,8 +50,7 @@ function EditProfileModal({
           placeholder="Name"
           minLength={1}
           maxLength={30}
-          required
-          onChange={handleChange}
+          onChange={handleInput}
           value={values.name}
         />
       </label>
@@ -55,8 +62,7 @@ function EditProfileModal({
           className="modal__input"
           id="avatar"
           placeholder="Avatar URL"
-          required
-          onChange={handleChange}
+          onChange={handleInput}
           value={values.avatar}
         />
       </label>

@@ -16,35 +16,45 @@ function addItem(name, imageUrl, weather) {
 }
 
 function likeItem(id) {
-    return fetch(`${baseUrl}/items/${id}/likes`, {
+  return fetch(`${baseUrl}/items/${id}/likes`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
       authorization: `Bearer ${localStorage.getItem("jwt")}`,
-    }
+    },
   }).then(checkResponse);
 }
 
 function dislikeItem(id) {
-    return fetch(`${baseUrl}/items/${id}/likes`, {
+  return fetch(`${baseUrl}/items/${id}/likes`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
       authorization: `Bearer ${localStorage.getItem("jwt")}`,
-    }
+    },
   }).then(checkResponse);
 }
 
-function editProfile(name, avatar) {
+function editProfile(updatedProfile) {
   return fetch(`${baseUrl}/users/me`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
       authorization: `Bearer ${localStorage.getItem("jwt")}`,
     },
-    body: JSON.stringify({ name, avatar }),
+    body: JSON.stringify(updatedProfile),
   }).then(checkResponse);
 }
+// function editProfile({ name, avatar }) {
+//   return fetch(`${baseUrl}/users/me`, {
+//     method: "PATCH",
+//     headers: {
+//       "Content-Type": "application/json",
+//       authorization: `Bearer ${localStorage.getItem("jwt")}`,
+//     },
+//     body: JSON.stringify({ name, avatar }),
+//   }).then(checkResponse);
+// }
 
 function deleteItem(id) {
   return fetch(`${baseUrl}/items/${id}`, {
@@ -60,7 +70,17 @@ function checkResponse(res) {
   if (res.ok) {
     return res.json();
   }
-  return Promise.reject(`Error ${res.status}`);
+  return res.json().then((errData) => {
+    return Promise.reject(errData.validation?.body?.message || errData.message);
+  });
 }
 
-export { getItems, addItem, likeItem, dislikeItem, editProfile, deleteItem, checkResponse };
+export {
+  getItems,
+  addItem,
+  likeItem,
+  dislikeItem,
+  editProfile,
+  deleteItem,
+  checkResponse,
+};

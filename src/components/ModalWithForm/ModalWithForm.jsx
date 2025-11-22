@@ -9,6 +9,7 @@ function ModalWithForm({
   isOpen,
   onSubmit,
   toggleButton,
+  errorMessage,
 }) {
   return (
     <div className={`modal ${isOpen && "modal_opened"}`}>
@@ -21,8 +22,10 @@ function ModalWithForm({
             alt="close button"
           />
         </button>
-        <form onSubmit={onSubmit} className="modal__form">
+        <form onSubmit={onSubmit} className="modal__form" noValidate>
           {children}
+
+          {errorMessage && (<p className="modal__error-message">{errorMessage}</p>)}
           <div className="modal__button-container">
             <button type="submit" className="modal__submit">
               {buttonText}
